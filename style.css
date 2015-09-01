@@ -1,0 +1,18 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+     height: 100%;
+}
+
+body {
+    background-color: #222;
+     justify-content: center;
+         align-items: center;
+         font-family: 'GlacialIndifferenceRegular', sans-serif;
+             display: flex;
+              height: 100%;
+               color: #eee;
+}

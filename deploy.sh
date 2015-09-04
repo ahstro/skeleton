@@ -2,7 +2,7 @@
 
 counter=1
 
-if [ ! -h prod/style.css ]
+if [ ! -h prod/style.css ] && [ -e style.css ] && [ ! -e style.scss ]
 then
   if [ -e prod/style.css ]
   then
@@ -16,6 +16,11 @@ while [ true ]
 do
   echo -ne "Call \033[0;34m$counter\033[0m: Deploying."
   jade -s -P -o prod index.jade
+  if [ -e style.scss ]
+  then
+    echo -n "."
+    sass style.scss prod/style.css
+  fi
   echo -n "."
   babel script.js > prod/script.js
   echo -e ".\033[0;32mdone\033[0m"

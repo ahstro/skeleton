@@ -1,5 +1,5 @@
 #Skeleton
 
-Skeleton for my Jade/CSS/ES6 projects
+Skeleton for my Jade/Sass/ES6 projects
 
 Uses [the MIT License](LICENSE.md)

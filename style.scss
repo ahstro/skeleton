@@ -1,3 +1,6 @@
+$bg-color: #222;
+$fg-color: #eee;
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -8,11 +11,11 @@ html {
 }
 
 body {
-    background-color: #222;
+    background-color: $bg-color;
      justify-content: center;
          align-items: center;
          font-family: 'GlacialIndifferenceRegular', sans-serif;
              display: flex;
               height: 100%;
-               color: #eee;
+               color: $fg-color;
 }

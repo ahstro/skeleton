@@ -14,7 +14,7 @@ fi
 
 while [ true ]
 do
-  echo -ne "Call \033[0;34m$counter\033[0m: Deploying."
+  echo -ne "Call \033[0;34m$counter\033[0m: Compiling."
   jade -s -P -o prod index.jade
   if [ -e style.scss ]
   then

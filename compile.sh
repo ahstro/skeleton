@@ -12,6 +12,26 @@ then
   echo "Symlinking style.css to prod/style.css"
 fi
 
+if [ ! -h prod/bower_components ] && [ -e bower_components ]
+then
+  if [ -e prod/bower_components ]
+  then
+    mv prod/bower_components prod/bower_components.bak
+  fi
+  ln -s ../bower_components prod/bower_components
+  echo "Symlinking bower_components to prod/bower_components"
+fi
+
+if [ ! -h prod/node_modules ] && [ -e node_modules ]
+then
+  if [ -e prod/node_modules ]
+  then
+    mv prod/node_modules prod/node_modules.bak
+  fi
+  ln -s ../node_modules prod/node_modules
+  echo "Symlinking node_modules to prod/node_modules"
+fi
+
 while [ true ]
 do
   echo -ne "Call \033[0;34m$counter\033[0m: Compiling."

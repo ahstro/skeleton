@@ -1,15 +1,19 @@
 var gulp = require('gulp')
 var jade = require('gulp-jade')
 var sass = require('gulp-sass')
-var babl = require('gulp-babel')
-var cnct = require('gulp-connect')
+var gutil = require('gulp-util')
+var source = require('vinyl-source-stream')
+var connect = require('gulp-connect')
+var babelify = require('babelify')
+var watchify = require('watchify')
+var browserify = require('browserify')
 
 var clientRoot = 'public'
 var paths = {
   src: {
-    jade: 'jade/*.jade',
-    scss: 'scss/*.scss',
-    js: 'js/*.js'
+    jade: 'jade/*',
+    scss: 'scss/*',
+    js: 'js/*'
   },
   dst: {
     html: `${clientRoot}`,
@@ -30,26 +34,51 @@ gulp.task('scss', () => {
     .pipe(gulp.dest(paths.dst.css))
 })
 
-gulp.task('es6', () => {
-  gulp.src(paths.src.js)
-    .pipe(babl())
+var bundler = browserify({
+  entries: ['js/main'],
+  transform: [babelify],
+  extensions: ['.js', '.jsx'],
+  debug: true,
+  cache: {},
+  packageCache: {},
+  fullPaths: true
+})
+
+gulp.task('js', () => {
+  bundler
+    .bundle()
+    .on('error', gutil.log.bind(gutil, 'Browserify error'))
+    .pipe(source('app.js'))
     .pipe(gulp.dest(paths.dst.js))
+})
+
+gulp.task('watch', () => {
+  gulp.watch(paths.src.jade, ['jade'])
+  gulp.watch(paths.src.scss, ['scss'])
+
+  var wundler = watchify(bundler, {poll: 100})
+
+  function build (file) {
+    if (file) gutil.log('Recompiling ' + file)
+    wundler
+      .bundle()
+      .on('error', gutil.log.bind(gutil, 'Browserify error'))
+      .pipe(source('app.js'))
+      .pipe(gulp.dest(paths.dst.js))
+  }
+
+  build()
+  wundler.on('update', build)
 })
 
 gulp.task('build', [
   'jade',
   'scss',
-  'es6'
+  'js'
 ])
 
-gulp.task('watch', () => {
-  gulp.watch(paths.src.jade, ['jade'])
-  gulp.watch(paths.src.scss, ['scss'])
-  gulp.watch(paths.src.js, ['es6'])
-})
-
 gulp.task('webserver', () => {
-  cnct.server({
+  connect.server({
     root: clientRoot,
     port: 8000
   })
